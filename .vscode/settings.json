@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "dotenv.h": "c",
+        "stdbool.h": "c"
+    }
+}
