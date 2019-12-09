@@ -64,7 +64,7 @@ int main(void)
         time(&temp);
         local=localtime(&temp);
         dat[0]='\0';
-        //printf("%d",local->tm_mday);
+	//montando a data
         sprintf(tmp,"%d",local->tm_mday);
         strcat(dat,tmp);
         strcat(dat,"_");
@@ -74,6 +74,7 @@ int main(void)
         sprintf(tmp,"%d",local->tm_year+1900);
         strcat(dat,tmp);
         puts(dat);
+	//montando o horário
         sprintf(tmp,"%d",local->tm_hour);
         strcat(tim,tmp);
         strcat(tim,":");
@@ -82,9 +83,8 @@ int main(void)
         strcat(tim,":");
         sprintf(tmp,"%d",local->tm_sec);
         strcat(tim,tmp);
-        //strcat(dat,itoa(local->tm_mon+1));
-        //strcat(dat,itoa(local->tm_year+1900));
-        char aux[2*MAXLINE];
+        
+	char aux[2*MAXLINE];
         int len, n;
         n = recvfrom(sockfd, aux, MAXLINE,
                      MSG_WAITALL, (struct sockaddr *)&cliaddr,
@@ -94,14 +94,18 @@ int main(void)
         for (char *p = strtok(aux, ","); p != NULL; p = strtok(NULL, ",")){
             fname[0]='\0';
             if(cont==0){
+		//obtém o nome da máquina
                 mname=p;
             }
             if(cont==2){
+		//obtém o token de função sendo processado: disk, memory, users
                 token=p;
             }
             
-            if(cont==3){//3 corresponde ao conteúd
+            if(cont==3){//3 corresponde ao conteúdo resultado
+		//verifica a que dado se refere e grava no arquivo correspondente
                 if(!strcmp(token,"DISK")){
+		    //montagem do nome do arquivo:nome_máquina+id_dado+data
                     strcat(fname,"./");
                     strcat(fname,mname);
                     strcat(fname,"disk");
@@ -111,6 +115,7 @@ int main(void)
                     if(arq==NULL){
                         printf("ERROR FILE");
                     }
+		    //identifica cada volume de dados com o horário
                     fputs("Horário: ",arq);
                     fputs(tim,arq);
                     fputs(p,arq);
@@ -118,7 +123,9 @@ int main(void)
                 }
                 else{
                     if(!strcmp(token,"MEMORY")){
-                        strcat(fname,"./");
+			//puts(getenv("LOG_PATH"));
+                        //strcat(fname,"./");
+			strcat(fname,getenv("LOG_PATH"));
                         strcat(fname,mname);
                         strcat(fname,"memory");
                         strcat(fname,dat);
@@ -154,11 +161,7 @@ int main(void)
             cont++;
         }
     }
-    //printf("%s\n",msg);
-    //content=strtok(msg,",");
-    //puts(msg);
-    //printf("%d\n", read_next(&aux));
-    //printf("%s\n", aux);
+    
 
     return 0;
 }
