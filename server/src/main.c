@@ -30,7 +30,6 @@ struct tm *local;
 int main(void)
 {
     env_load(".", false);
-    //char *connection = getenv("SERVER_PORT");
     
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
@@ -97,6 +96,11 @@ int main(void)
 		//obtém o nome da máquina
                 mname=p;
             }
+	    if(cont==1){
+	    	if(strcmp(p,"passwd")){
+		  printf("Senha errada");
+		}
+	    }
             if(cont==2){
 		//obtém o token de função sendo processado: disk, memory, users
                 token=p;
@@ -106,12 +110,13 @@ int main(void)
 		//verifica a que dado se refere e grava no arquivo correspondente
                 if(!strcmp(token,"DISK")){
 		    //montagem do nome do arquivo:nome_máquina+id_dado+data
-                    strcat(fname,"./");
-                    strcat(fname,mname);
+                    //strcat(fname,"./");
+                    strcat(fname,getenv("LOG_PATH"));
+		    strcat(fname,mname);
                     strcat(fname,"disk");
                     strcat(fname,dat);
                     strcat(fname,".txt");
-                    arq=fopen(fname,"a+");
+                    arq=fopen(fname,"a");
                     if(arq==NULL){
                         printf("ERROR FILE");
                     }
@@ -130,7 +135,7 @@ int main(void)
                         strcat(fname,"memory");
                         strcat(fname,dat);
                         strcat(fname,".txt");
-                        arq=fopen(fname,"a+");
+                        arq=fopen(fname,"a");
                         if(arq==NULL){
                             printf("ERROR FILE");
                         }
@@ -141,12 +146,12 @@ int main(void)
                     }
                     else{
                         if(!strcmp(token,"USERS")){
-                            strcat(fname,"./");
+                            strcat(fname,getenv("LOG_PATH"));
                             strcat(fname,mname);
                             strcat(fname,"users");
                             strcat(fname,dat);
                             strcat(fname,".txt");
-                            arq=fopen(fname,"a+");
+                            arq=fopen(fname,"a");
                             if(arq==NULL){
                                 printf("ERROR FILE");
                             }
@@ -166,12 +171,4 @@ int main(void)
     return 0;
 }
 
-int read_next(char *result)
-{
 
-    return 1;
-    // sendto(sockfd, (const char *)hello, strlen(hello),
-    //     MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
-    //         len);
-    // printf("Hello message sent.\n");
-}
