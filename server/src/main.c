@@ -8,9 +8,24 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <time.h>
 
 #define PORT 8080
 #define MAXLINE 1024
+
+char *content;
+char *token;
+char msg[2*MAXLINE];
+char dat[20];
+char tim[20];
+char tmp[5];
+char fname[40];
+char *mname;
+int cont;
+FILE *arq;
+time_t temp;
+struct tm *local;
+
 
 int main(void)
 {
@@ -42,17 +57,106 @@ int main(void)
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
+    msg[0]='\0';
     while (1)
     {
-        char aux[MAXLINE];
+        tim[0]='\0';
+        time(&temp);
+        local=localtime(&temp);
+        dat[0]='\0';
+        //printf("%d",local->tm_mday);
+        sprintf(tmp,"%d",local->tm_mday);
+        strcat(dat,tmp);
+        strcat(dat,"_");
+        sprintf(tmp,"%d",local->tm_mon+1);
+        strcat(dat,tmp);
+        strcat(dat,"_");
+        sprintf(tmp,"%d",local->tm_year+1900);
+        strcat(dat,tmp);
+        puts(dat);
+        sprintf(tmp,"%d",local->tm_hour);
+        strcat(tim,tmp);
+        strcat(tim,":");
+        sprintf(tmp,"%d",local->tm_min);
+        strcat(tim,tmp);
+        strcat(tim,":");
+        sprintf(tmp,"%d",local->tm_sec);
+        strcat(tim,tmp);
+        //strcat(dat,itoa(local->tm_mon+1));
+        //strcat(dat,itoa(local->tm_year+1900));
+        char aux[2*MAXLINE];
         int len, n;
         n = recvfrom(sockfd, aux, MAXLINE,
                      MSG_WAITALL, (struct sockaddr *)&cliaddr,
                      &len);
         aux[n] = '\0';
-        printf("%s\n",aux);
+        cont=0;
+        for (char *p = strtok(aux, ","); p != NULL; p = strtok(NULL, ",")){
+            fname[0]='\0';
+            if(cont==0){
+                mname=p;
+            }
+            if(cont==2){
+                token=p;
+            }
+            
+            if(cont==3){//3 corresponde ao conteúd
+                if(!strcmp(token,"DISK")){
+                    strcat(fname,"./");
+                    strcat(fname,mname);
+                    strcat(fname,"disk");
+                    strcat(fname,dat);
+                    strcat(fname,".txt");
+                    arq=fopen(fname,"a+");
+                    if(arq==NULL){
+                        printf("ERROR FILE");
+                    }
+                    fputs("Horário: ",arq);
+                    fputs(tim,arq);
+                    fputs(p,arq);
+                    fflush(arq);
+                }
+                else{
+                    if(!strcmp(token,"MEMORY")){
+                        strcat(fname,"./");
+                        strcat(fname,mname);
+                        strcat(fname,"memory");
+                        strcat(fname,dat);
+                        strcat(fname,".txt");
+                        arq=fopen(fname,"a+");
+                        if(arq==NULL){
+                            printf("ERROR FILE");
+                        }
+                        fputs("Horário: ",arq);
+                        fputs(tim,arq);
+                        fputs(p,arq);
+                        fflush(arq);
+                    }
+                    else{
+                        if(!strcmp(token,"USERS")){
+                            strcat(fname,"./");
+                            strcat(fname,mname);
+                            strcat(fname,"users");
+                            strcat(fname,dat);
+                            strcat(fname,".txt");
+                            arq=fopen(fname,"a+");
+                            if(arq==NULL){
+                                printf("ERROR FILE");
+                            }
+                            fputs("Horário: ",arq);
+                            fputs(tim,arq);
+                            fputs(p,arq);
+                            fflush(arq);
+                        }
+                    }
+                }
+            }
+            cont++;
+        }
     }
-
+    //printf("%s\n",msg);
+    //content=strtok(msg,",");
+    //puts(msg);
     //printf("%d\n", read_next(&aux));
     //printf("%s\n", aux);
 

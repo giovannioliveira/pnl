@@ -1,7 +1,7 @@
 #commands
 DISK=du
 MEMORY=cat /proc/meminfo
-USERS=who
+USERS=w
 
 #command index
 KEYS=DISK,MEMORY,USERS
