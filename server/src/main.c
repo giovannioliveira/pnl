@@ -1,3 +1,11 @@
+/* 
+Código do programa servidor que obtém os dados e os grava de acordo com o tipo de dados em arquivos correspondentes.
+
+Autores:
+Giovanni Oliveira
+Henrique Rodrigues
+*/
+
 #include <stdio.h>
 #include "../lib/dotenv.c"
 
@@ -63,7 +71,7 @@ int main(void)
         time(&temp);
         local=localtime(&temp);
         dat[0]='\0';
-	//montando a data
+	    //montando a data
         sprintf(tmp,"%d",local->tm_mday);
         strcat(dat,tmp);
         strcat(dat,"_");
@@ -73,7 +81,7 @@ int main(void)
         sprintf(tmp,"%d",local->tm_year+1900);
         strcat(dat,tmp);
         puts(dat);
-	//montando o horário
+	    //montando o horário
         sprintf(tmp,"%d",local->tm_hour);
         strcat(tim,tmp);
         strcat(tim,":");
@@ -83,7 +91,7 @@ int main(void)
         sprintf(tmp,"%d",local->tm_sec);
         strcat(tim,tmp);
         
-	char aux[2*MAXLINE];
+	    char aux[2*MAXLINE];
         int len, n;
         n = recvfrom(sockfd, aux, MAXLINE,
                      MSG_WAITALL, (struct sockaddr *)&cliaddr,
@@ -93,26 +101,26 @@ int main(void)
         for (char *p = strtok(aux, ","); p != NULL; p = strtok(NULL, ",")){
             fname[0]='\0';
             if(cont==0){
-		//obtém o nome da máquina
+		        //obtém o nome da máquina
                 mname=p;
             }
-	    if(cont==1){
-	    	if(strcmp(p,"passwd")){
-		  printf("Senha errada");
-		}
-	    }
+	        if(cont==1){
+	    	    if(strcmp(p,"passwd")){
+		            printf("Senha errada");
+		        }
+	        }
             if(cont==2){
-		//obtém o token de função sendo processado: disk, memory, users
+		        //obtém o token de função sendo processado: disk, memory, users
                 token=p;
             }
             
             if(cont==3){//3 corresponde ao conteúdo resultado
-		//verifica a que dado se refere e grava no arquivo correspondente
+		        //verifica a que dado se refere e grava no arquivo correspondente
                 if(!strcmp(token,"DISK")){
-		    //montagem do nome do arquivo:nome_máquina+id_dado+data
-                    //strcat(fname,"./");
+		            //montagem do nome do arquivo:nome_máquina+id_dado+data
+                    
                     strcat(fname,getenv("LOG_PATH"));
-		    strcat(fname,mname);
+		            strcat(fname,mname);
                     strcat(fname,"disk");
                     strcat(fname,dat);
                     strcat(fname,".txt");
@@ -120,17 +128,18 @@ int main(void)
                     if(arq==NULL){
                         printf("ERROR FILE");
                     }
-		    //identifica cada volume de dados com o horário
+		            //identifica cada volume de dados com o horário
                     fputs("Horário: ",arq);
                     fputs(tim,arq);
                     fputs(p,arq);
+                    fputs("\n",arq);
+                    fputs("---------",arq);
+                    fputs("\n",arq);
                     fflush(arq);
                 }
                 else{
                     if(!strcmp(token,"MEMORY")){
-			//puts(getenv("LOG_PATH"));
-                        //strcat(fname,"./");
-			strcat(fname,getenv("LOG_PATH"));
+			            strcat(fname,getenv("LOG_PATH"));
                         strcat(fname,mname);
                         strcat(fname,"memory");
                         strcat(fname,dat);
@@ -142,6 +151,9 @@ int main(void)
                         fputs("Horário: ",arq);
                         fputs(tim,arq);
                         fputs(p,arq);
+                        fputs("\n",arq);
+                        fputs("---------",arq);
+                        fputs("\n",arq);
                         fflush(arq);
                     }
                     else{
@@ -158,6 +170,9 @@ int main(void)
                             fputs("Horário: ",arq);
                             fputs(tim,arq);
                             fputs(p,arq);
+                            fputs("\n",arq);
+                            fputs("---------",arq);
+                            fputs("\n",arq);
                             fflush(arq);
                         }
                     }

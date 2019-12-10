@@ -1,3 +1,11 @@
+/* 
+Código do programa cliente que obtém os dados da máquina e os envia para o servidor a fim de serem organizados e armazenados.
+
+Autores:
+Giovanni Oliveira
+Henrique Rodrigues
+*/
+
 #include <stdio.h>
 #include "../lib/dotenv.c"
 
@@ -51,9 +59,11 @@ char* run_command(char *command){
 
 int main(void)
 {	
-    //while(1){
-          
-	    //sleep(5);
+	while(1){
+        for (int i=0;i<10;i++){
+			sleep(1);
+		}  
+	    
 	    env_load(".", false);
 
 	    char *id = getenv("ID");
@@ -98,6 +108,7 @@ int main(void)
 		conteudo=run_command(getenv(p));
 		strcpy(aux,conteudo);
 		strcat(buffer,aux);
+		puts(aux);
 		
 		
 		
@@ -106,8 +117,8 @@ int main(void)
 		       MSG_CONFIRM, (const struct sockaddr *)&servaddr,
 		       sizeof(servaddr));
 	    }   
+		free(aux);
 	    close(sockfd);
-            
-    //}
+    }
     return 0;
 }

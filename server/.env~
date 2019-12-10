@@ -1,6 +1,0 @@
-#service runtime config
-SERVER_PORT=7000
-PASSWORD=passwd
-
-#path to save logs received through UDP socket
-LOG_PATH=/var/log/pnl
