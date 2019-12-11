@@ -59,25 +59,33 @@ char* run_command(char *command){
 
 int main(void)
 {	
-	while(1){
-        for (int i=0;i<10;i++){
-			sleep(1);
-		}  
-	    
+	
+         
 	    env_load(".", false);
-
-	    char *id = getenv("ID");
-	    char *password = getenv("PASSWORD");
-	    char *keys = getenv("KEYS");
 	    
+		
+	    char *id;
+	    char *password;
+	    char *keys;
+	    char *p;
 	    
 	    
 
 	    int sockfd;
 	    struct sockaddr_in servaddr;
+		int j;
+	    
+	//while(1){
+		j=0;
+		env_load(".", false);
+		id = getenv("ID");
+	    password = getenv("PASSWORD");
+	    keys = getenv("KEYS");
 
-	    
-	    
+
+		for (int i=0;i<1;i++){
+			sleep(1);
+		} 
 	    // Creating socket file descriptor
 	    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
 	    {
@@ -92,8 +100,8 @@ int main(void)
 	    servaddr.sin_port = htons(PORT);
 	    servaddr.sin_addr.s_addr = INADDR_ANY;
 
-	    char *p;
-	    for (char *p = strtok(keys, ","); p != NULL; p = strtok(NULL, ","))
+	    //char *p;
+	    for (p = strtok(keys, ","); p != NULL; p = strtok(NULL, ","))
 	    {
 		buffer[0] = '\0';
 		strcat(buffer,id);
@@ -102,23 +110,27 @@ int main(void)
 		strcat(buffer,",");
 		strcat(buffer,p);
 		strcat(buffer,",");
-		strcat(buffer,"\n");
-		run_command(getenv(p));
+		//strcat(buffer,"\n");
+		//run_command(getenv(p));
 		aux=(char*)malloc(sizeof(buffer));
 		conteudo=run_command(getenv(p));
 		strcpy(aux,conteudo);
 		strcat(buffer,aux);
-		puts(aux);
-		
-		
+		puts(p);
+		free(aux);
+		printf("%d",j);
+		j++;
 		
 		int n, len;
 		sendto(sockfd, (const char *)buffer, strlen(buffer),
 		       MSG_CONFIRM, (const struct sockaddr *)&servaddr,
 		       sizeof(servaddr));
 	    }   
-		free(aux);
-	    close(sockfd);
-    }
+		close(sockfd);
+		p=0;
+		keys[0]='\0';
+		
+	    
+    //}
     return 0;
 }
