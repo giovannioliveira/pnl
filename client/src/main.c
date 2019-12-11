@@ -75,17 +75,14 @@ int main(void)
 	    struct sockaddr_in servaddr;
 		int j;
 	    
-	//while(1){
+	
 		j=0;
-		env_load(".", false);
+		
 		id = getenv("ID");
 	    password = getenv("PASSWORD");
 	    keys = getenv("KEYS");
 
 
-		for (int i=0;i<1;i++){
-			sleep(1);
-		} 
 	    // Creating socket file descriptor
 	    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
 	    {
@@ -100,7 +97,7 @@ int main(void)
 	    servaddr.sin_port = htons(PORT);
 	    servaddr.sin_addr.s_addr = INADDR_ANY;
 
-	    //char *p;
+	    
 	    for (p = strtok(keys, ","); p != NULL; p = strtok(NULL, ","))
 	    {
 		buffer[0] = '\0';
@@ -110,16 +107,11 @@ int main(void)
 		strcat(buffer,",");
 		strcat(buffer,p);
 		strcat(buffer,",");
-		//strcat(buffer,"\n");
-		//run_command(getenv(p));
 		aux=(char*)malloc(sizeof(buffer));
 		conteudo=run_command(getenv(p));
 		strcpy(aux,conteudo);
 		strcat(buffer,aux);
-		puts(p);
 		free(aux);
-		printf("%d",j);
-		j++;
 		
 		int n, len;
 		sendto(sockfd, (const char *)buffer, strlen(buffer),
@@ -131,6 +123,6 @@ int main(void)
 		keys[0]='\0';
 		
 	    
-    //}
+    
     return 0;
 }

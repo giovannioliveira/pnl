@@ -131,6 +131,7 @@ int main(void)
 		            //identifica cada volume de dados com o horário
                     fputs("Horário: ",arq);
                     fputs(tim,arq);
+		    fputs("\n",arq);
                     fputs(p,arq);
                     fputs("\n",arq);
                     fputs("---------",arq);
@@ -139,7 +140,7 @@ int main(void)
                 }
                 else{
                     if(!strcmp(token,"MEMORY")){
-			            strcat(fname,getenv("LOG_PATH"));
+			strcat(fname,getenv("LOG_PATH"));
                         strcat(fname,mname);
                         strcat(fname,"memory");
                         strcat(fname,dat);
@@ -150,6 +151,7 @@ int main(void)
                         }
                         fputs("Horário: ",arq);
                         fputs(tim,arq);
+			fputs("\n",arq);
                         fputs(p,arq);
                         fputs("\n",arq);
                         fputs("---------",arq);
@@ -169,6 +171,7 @@ int main(void)
                             }
                             fputs("Horário: ",arq);
                             fputs(tim,arq);
+			    fputs("\n",arq);
                             fputs(p,arq);
                             fputs("\n",arq);
                             fputs("---------",arq);
