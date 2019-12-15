@@ -23,7 +23,7 @@ Henrique Rodrigues
 
 char *content;
 char *token;
-char msg[2*MAXLINE];
+char msg[3*MAXLINE];
 char dat[20];
 char tim[20];
 char tmp[5];
@@ -91,7 +91,7 @@ int main(void)
         sprintf(tmp,"%d",local->tm_sec);
         strcat(tim,tmp);
         
-	    char aux[2*MAXLINE];
+	    char aux[3*MAXLINE];
         int len, n;
         n = recvfrom(sockfd, aux, MAXLINE,
                      MSG_WAITALL, (struct sockaddr *)&cliaddr,
@@ -118,7 +118,6 @@ int main(void)
 		        //verifica a que dado se refere e grava no arquivo correspondente
                 if(!strcmp(token,"DISK")){
 		            //montagem do nome do arquivo:nome_máquina+id_dado+data
-                    
                     strcat(fname,getenv("LOG_PATH"));
 		            strcat(fname,mname);
                     strcat(fname,"disk");

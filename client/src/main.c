@@ -25,7 +25,7 @@ Henrique Rodrigues
 char buffer[3*MAXLINE];
 
 char *conteudo;
-char cont[2*MAXLINE];
+char cont[3*MAXLINE];
 char lin[2*MAXLINE];
 
 char* aux;
@@ -40,18 +40,23 @@ int clean_buf(char *buf){
 
 
 char* read_buf(FILE *input){
-    
     clean_buf(cont);
     while(fgets(lin,sizeof(input),input)){
         strcat(cont,lin);
     }
+	
     return cont;
 };
 
 char* run_command(char *command){
     FILE *fp;
     char *content;
-    fp= popen(command,"r");    
+	fflush(stdin);
+    fp = popen(command,"r");
+	
+	if(fp==NULL){
+		puts("Erro. Comando não foi executado");
+	}    
     content = read_buf(fp);
     pclose(fp);
     return content;
@@ -61,7 +66,7 @@ int main(void)
 {	
 	
          
-	    env_load(".", false);
+	    
 	    
 		
 	    char *id;
@@ -77,7 +82,7 @@ int main(void)
 	    
 	
 		j=0;
-		
+		env_load(".", false);
 		id = getenv("ID");
 	    password = getenv("PASSWORD");
 	    keys = getenv("KEYS");
@@ -109,8 +114,10 @@ int main(void)
 		strcat(buffer,",");
 		aux=(char*)malloc(sizeof(buffer));
 		conteudo=run_command(getenv(p));
+		
 		strcpy(aux,conteudo);
 		strcat(buffer,aux);
+		
 		free(aux);
 		
 		int n, len;
