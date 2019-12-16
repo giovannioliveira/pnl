@@ -1,3 +1,12 @@
+/* 
+Código do executador que, em loop, chama o cliente de acordocom o tempo definido de intervalo.
+
+Autores:
+Giovanni Oliveira
+Henrique Rodrigues
+*/
+
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>

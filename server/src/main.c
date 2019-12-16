@@ -1,6 +1,10 @@
 /* 
 Código do programa servidor que obtém os dados e os grava de acordo com o tipo de dados em arquivos correspondentes.
 
+Baseado na fonte :
+https://www.geeksforgeeks.org/udp-server-client-implementation-c/
+Acesso em 5/12/2019
+
 Autores:
 Giovanni Oliveira
 Henrique Rodrigues

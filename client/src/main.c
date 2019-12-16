@@ -1,6 +1,10 @@
 /* 
 Código do programa cliente que obtém os dados da máquina e os envia para o servidor a fim de serem organizados e armazenados.
 
+Baseado na fonte :
+https://www.geeksforgeeks.org/udp-server-client-implementation-c/
+Acesso em 05/12/2019
+
 Autores:
 Giovanni Oliveira
 Henrique Rodrigues
